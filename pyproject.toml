@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conlfuent-kafka-mixins"
+version = "1.0.0.0"
+authors = [
+    {name = "Christen Ford", email = "christen0ford@gmail.com"},
+]
+description = "Mixins for the `confluent_kafka` Python package that add support for optional features."
+readme = "README.md"
+license = {text = "Apache License 2.0"}
+classifiers = [
+    "Framework :: Confluent Kafka",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
