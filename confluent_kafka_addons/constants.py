@@ -6,17 +6,20 @@ class RetriableUnit(enum.Enum):
     MILLISECONDS = 1
 
     @staticmethod
-    def is_seconds(unit: typing.Union[int, "RetriableUnit"]):
-        """_summary_
+    def is_seconds(unit: typing.Union[int, "RetriableUnit"]) -> bool:
+        """Determines if `unit` is constants.RetriableUnit.SECONDS.
 
         Args:
-            unit (typing.Union[int, &quot;RetriableUnit&quot;]): _description_
+            unit (typing.Union[int, RetriableUnit]): An int or 
+                constants.RetriableUnit.SECONDS instance.
 
         Raises:
-            TypeError: _description_
+            TypeError: If `unit` is not an int or 
+                constants.RetriableUnit.SECONDS instance.
 
         Returns:
-            _type_: _description_
+            (bool): True if `unit` is constants.RetriableUnit.SECONDS, 
+                False otherwise.
         """
         if isinstance(unit, int):
             return unit == RetriableUnit.SECONDS.value
@@ -30,17 +33,20 @@ class RetriableUnit(enum.Enum):
 
 
     @staticmethod
-    def is_milliseconds(unit: typing.Union[int, "RetriableUnit"]):
-        """_summary_
+    def is_milliseconds(unit: typing.Union[int, "RetriableUnit"]) -> bool:
+        """Determines if `unit` is constants.RetriableUnit.MILLISECONDS.
 
         Args:
-            unit (typing.Union[int, &quot;RetriableUnit&quot;]): _description_
+            unit (typing.Union[int, RetriableUnit]): An int or 
+                constants.RetriableUnit.MILLISECONDS instance.
 
         Raises:
-            TypeError: _description_
+            TypeError: If `unit` is not an int or 
+                constants.RetriableUnit.MILLISECONDS instance.
 
         Returns:
-            _type_: _description_
+            (bool): True if `unit` is constants.RetriableUnit.MILLISECONDS, 
+                False otherwise.
         """
         if isinstance(unit, int):
             return unit == RetriableUnit.MILLISECONDS.value
