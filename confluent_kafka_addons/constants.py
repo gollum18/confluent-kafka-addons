@@ -60,6 +60,19 @@ class RetriableUnit(enum.Enum):
 
 
     @staticmethod
+    def is_valid(unit: typing.Union[int, "RetriableUnit"]):
+        if isinstance(unit, int):
+            return unit in [e.value for e in RetriableUnit]
+        elif isinstance(unit, RetriableUnit):
+            return unit in RetriableUnit
+        else:
+            raise TypeError(
+                "[constants.RetriableUnit.valid] - parameter "
+                + "'unit' must be one of the following types: [int, "
+                + "RetriableUnit]!")    
+
+
+    @staticmethod
     def format_str() -> str:
         """Returns a string containing the names of the Enumeration names specified by the Retriable Enum.
 
