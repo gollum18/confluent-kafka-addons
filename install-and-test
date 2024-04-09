@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python -m build
+pip install .
+python -m pytest

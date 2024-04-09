@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "conlfuent-kafka-mixins"
+name = "confluent-kafka-addons"
 version = "1.0.0.0"
 authors = [
     {name = "Christen Ford", email = "christen0ford@gmail.com"},
