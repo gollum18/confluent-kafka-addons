@@ -8,7 +8,8 @@ from . import errors
 
 
 class Retriable(object):
-    """Hybrid decorator that implements the Retry pattern with exponential backoff.
+    """Hybrid decorator that implements the Retry pattern with exponential
+    backoff.
 
     Waits base**retries seconds before calling the decorated function
     and returning the result.
@@ -16,7 +17,8 @@ class Retriable(object):
     On error, the retry counter is incremented by one.
 
     This implementation is synchronous. The caller will be forced to wait
-    until the function completes successfully or a RetriableException is raised by the decorator.
+    until the function completes successfully or a RetriableException is
+    raised by the decorator.
     """
 
     def __init__(
@@ -87,7 +89,8 @@ class Retriable(object):
                 else:
                     raise ValueError(
                         "[decorators.Retriable] - parameter "
-                        + f"'unit' must be one of {constants.RetriableUnit.format_str()}"
+                        + "'unit' must be one of "
+                        + f"{constants.RetriableUnit.format_str()}"
                     )
                 time.sleep(sleep_period)
                 return self.func(*args, **kwargs)
@@ -97,11 +100,16 @@ class Retriable(object):
 
 
 class Timeout(object):
-    """Hybrid decorator that implements the Timeout pattern. This is a extremely basic decorator that starts the target function in a threading.Thread object. It then joins against the thread and waits for the timeout.
+    """Hybrid decorator that implements the Timeout pattern. This is a
+    extremely basic decorator that starts the target function in a threading.
+    Thread object. It then joins against the thread and waits for the timeout.
 
-    If the timeout occurred, an errors.TimeoutException is raised by the Timeout decorator.
+    If the timeout occurred, an errors.TimeoutException is raised by the
+    Timeout decorator.
 
-    If you want to get values back out of the thread, a common pattern in Python is to pass in a mutable object such as a dictionary in the target functions argument or keywords arguments list and write to that.
+    If you want to get values back out of the thread, a common pattern in
+    Python is to pass in a mutable object such as a dictionary in the target
+    functions argument or keywords arguments list and write to that.
 
     There are no return values from this decorator.
     """
@@ -117,7 +125,8 @@ class Timeout(object):
 
         Args:
             timeout (int, optional): _description_. Defaults to 30.
-            timeout_callback (_type_, optional): _description_. Defaults to None.
+            timeout_callback (_type_, optional): _description_. Defaults to
+                None.
         """
         self.mode = "decorating"
         self.timeout = timeout
