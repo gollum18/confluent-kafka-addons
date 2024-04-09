@@ -58,7 +58,7 @@ def test_retriable_milliseconds_invalid_value():
     )
 
 
-def test_is_valid():
+def test_retriable_is_valid():
     test_inputs = [0, 1]
     expected_output = True
     for test_input in test_inputs:
@@ -66,7 +66,7 @@ def test_is_valid():
         expected_output == actual_output
 
 
-def test_is_value_invalid_type():
+def test_retriable_is_value_invalid_type():
     test_input = "abc"
     pytest.raises(
         TypeError, 
@@ -75,7 +75,7 @@ def test_is_value_invalid_type():
     )
 
 
-def test_is_valid_invalid_value():
+def test_retriable_is_valid_invalid_value():
     test_inputs = [-1, 2]
     expected_output = False
     for test_input in test_inputs:
