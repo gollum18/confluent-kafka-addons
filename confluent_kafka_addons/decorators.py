@@ -3,7 +3,7 @@ import time
 from . import errors
 
 class Retriable(object):
-    """Hybrid decorator that implements a the Retry pattern with exponential backoff. 
+    """Hybrid decorator that implements the Retry pattern with exponential backoff. 
 
     Waits $base**exp$ seconds before calling the decorated function 
     and returning the result.
