@@ -82,7 +82,7 @@ class Retriable(object):
                     raise ValueError(
                         "[decorators.Retriable] - parameter "
                         + f"'unit' must be one of {constants.RetriableUnit.format_str()}")
-                time.sleep(self.base*exp)
+                time.sleep(sleep_period)
                 return self.func(*args, **kwargs)
             except:
                 self.retries += 1
