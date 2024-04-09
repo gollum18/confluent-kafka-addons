@@ -116,7 +116,7 @@ class Timeout(object):
 
     def __init__(
         self,
-        timeout=30,
+        timeout: float = 30,
         timeout_callback: coll_abc.Callable[
             [typing.List[typing.Any], typing.Dict[str, typing.Any]], None
         ] = None,
@@ -124,9 +124,11 @@ class Timeout(object):
         """Instantiates and returns an instance of the Timeout decorator.
 
         Args:
-            timeout (int, optional): _description_. Defaults to 30.
-            timeout_callback (_type_, optional): _description_. Defaults to
-                None.
+            timeout (float, optional): The timeout in seconds. Defaults to 30.
+            timeout_callback (_type_, optional): An optional function to call
+                when a timeout occurs. This function must declare both *args
+                and **kwargs parameters as it will be passed the same
+                parameters passed to the decorated function. Defaults to None.
         """
         self.mode = "decorating"
         self.timeout = timeout
