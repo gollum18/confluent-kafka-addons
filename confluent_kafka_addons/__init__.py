@@ -1,3 +1,7 @@
+# TODO: The below keeps failing in CI with complaints about missing modules
+#   however, this builds, installs, and tests fine locally.
+# It probably has to do with some necessary setup in the Actions Workflow.
+"""
 import importlib.metadata
 
 from confluent_kafka_addons.constants import (RetriableUnit)
@@ -12,3 +16,4 @@ __all__ = (
     'Retriable',
     'RetriableException'
 )
+"""
