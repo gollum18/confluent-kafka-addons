@@ -48,5 +48,5 @@ class Retriable(object):
                 time.sleep(self.base*exp)
                 return self.func(*args, **kwargs)
             except:
-                self.max_retries += 1
+                self.retries += 1
         raise errors.RetriableException(self, args, kwargs)
