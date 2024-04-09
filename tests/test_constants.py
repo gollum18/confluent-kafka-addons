@@ -56,3 +56,28 @@ def test_retriable_milliseconds_invalid_value():
         constants.RetriableUnit.is_milliseconds, 
         test_input
     )
+
+
+def test_is_valid():
+    test_inputs = [0, 1]
+    expected_output = True
+    for test_input in test_inputs:
+        actual_output = constants.RetriableUnit.is_valid(test_input)
+        expected_output == actual_output
+
+
+def test_is_value_invalid_type():
+    test_input = "abc"
+    pytest.raises(
+        TypeError, 
+        constants.RetriableUnit.is_valid, 
+        test_input
+    )
+
+
+def test_is_valid_invalid_value():
+    test_inputs = [-1, 2]
+    expected_output = False
+    for test_input in test_inputs:
+        actual_output = constants.RetriableUnit.is_valid(test_input)
+        expected_output == actual_output
