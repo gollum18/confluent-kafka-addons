@@ -8,7 +8,10 @@ class Retriable(object):
     Waits $base**exp$ seconds before calling the decorated function 
     and returning the result.
 
-    On error, the retry counter is incremented by one
+    On error, the retry counter is incremented by one.
+
+    This implementation is synchronous. The caller will be forced to wait 
+    until the function completes successfully or a RetriableException is raised by the decorator. 
     """
 
     def __init__(self, max_retries=10, upper_bound=6, base=2):
@@ -27,6 +30,10 @@ class Retriable(object):
 
             base (int, optional): The exponential backoff base. Smaller values 
                 lead to less wait, larger values  more wait. Defaults to 2.
+
+        Raises:
+            (errors.RetriableException): When the maximum number of retries
+                has been exceeded.
         """
         self.max_retries = max_retries
         self.upper_bound = upper_bound
