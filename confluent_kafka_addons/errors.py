@@ -4,3 +4,8 @@ class RetriableException(Exception):
         self.retriable = retriable
         self.func_args = func_args
         self.func_kwargs = func_kwargs
+
+
+class TimeoutException(Exception):
+    def __init__(self, *args)
+        Exception.__init__(self, *args)

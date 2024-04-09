@@ -1,3 +1,4 @@
+import threading
 import time
 
 from . import constants
@@ -87,3 +88,32 @@ class Retriable(object):
             except:
                 self.retries += 1
         raise errors.RetriableException(self, args, kwargs)
+
+
+class Timeout(object):
+    """Hybrid decorator that implements the Timeout pattern. This is a extremely basic decorator that starts the target function in a threading.Thread object. It then joins against the thread and waits for the timeout.
+
+    If the timeout occurred, an errors.TimeoutException is raised by the Timeout decorator.
+
+    If you want to get values back out of the thread, a common pattern in Python is to pass in a mutable object such as a dictionary in the target functions argument or keywords arguments list and write to that.
+
+    There are no return values from this decorator.
+    """
+
+    def __init__(self, timeout=30):
+        self.mode = "decorating"
+        self.timeout = timeout
+
+
+    def __call__(self, *args, **kwargs):
+        if self.mode == "decorating":
+            self.func = args[0]
+            self.mode = "calling"
+            return self
+        runner = threading.Thread(target=self.func,
+                                  args=args,
+                                  kwargs=kwargs)
+        runner.start()
+        runner.join(timeout=self.timeout)
+        if runner.is_alive():
+            raise errors.TimeoutException()
