@@ -1,39 +1,47 @@
+import collections.abc as coll_abc
+import threading
 import time
+import typing
 
 from . import constants
 from . import errors
 
-class Retriable(object):
-    """Hybrid decorator that implements the Retry pattern with exponential backoff. 
 
-    Waits base**retries seconds before calling the decorated function 
+class Retriable(object):
+    """Hybrid decorator that implements the Retry pattern with exponential
+    backoff.
+
+    Waits base**retries seconds before calling the decorated function
     and returning the result.
 
     On error, the retry counter is incremented by one.
 
-    This implementation is synchronous. The caller will be forced to wait 
-    until the function completes successfully or a RetriableException is raised by the decorator. 
+    This implementation is synchronous. The caller will be forced to wait
+    until the function completes successfully or a RetriableException is
+    raised by the decorator.
     """
 
-    def __init__(self, 
-                 max_retries: int=10, 
-                 exponent_limit: int=6, 
-                 base: int=2,
-                 unit: constants.RetriableUnit=constants.RetriableUnit.SECONDS):
+    def __init__(
+        self,
+        max_retries: int = 10,
+        exponent_limit: int = 6,
+        base: int = 2,
+        unit: constants.RetriableUnit = constants.RetriableUnit.SECONDS,
+    ):
         """Instantiates and returns an instance of the Retriable decorator.
 
         Args:
-            max_retries (int, optional): The maximum number of retries allowed. 
+            max_retries (int, optional): The maximum number of retries allowed.
                 Defaults to 10.
-            exponent_limit (int, optional): The upper limit for the exponent in 
-                the exponential backoff calculation. This number must be less 
-                than or equal to max_retries. Larger values cause more wait. 
-                For example, with a base of 2, the largest wait time with the 
-                exponential backoff algorithm would be 64 seconds or 
+            exponent_limit (int, optional): The upper limit for the exponent in
+                the exponential backoff calculation. This number must be less
+                than or equal to max_retries. Larger values cause more wait.
+                For example, with a base of 2, the largest wait time with the
+                exponential backoff algorithm would be 64 seconds or
                 approximately 1 minute. Defaults to 6.
-            base (int, optional): The exponential backoff base. Smaller values 
+            base (int, optional): The exponential backoff base. Smaller values
                 lead to less wait, larger values  more wait. Defaults to 2.
-            unit (constants.RetriableUnit): The unit for the wait period. 
+            unit (constants.RetriableUnit): The unit for the wait period.
                 Defaults to constants.RetriableUnit.SECONDS.
 
         Raises:
@@ -75,15 +83,67 @@ class Retriable(object):
                 else:
                     exp = self.retries
                 if constants.RetriableUnit.is_seconds(self.unit):
-                    sleep_period = self.base*exp
+                    sleep_period = self.base * exp
                 elif constants.RetriableUnit.is_milliseconds(self.unit):
-                    sleep_period = (self.base*exp) / 1000
+                    sleep_period = (self.base * exp) / 1000
                 else:
                     raise ValueError(
                         "[decorators.Retriable] - parameter "
-                        + f"'unit' must be one of {constants.RetriableUnit.format_str()}")
+                        + "'unit' must be one of "
+                        + f"{constants.RetriableUnit.format_str()}"
+                    )
                 time.sleep(sleep_period)
                 return self.func(*args, **kwargs)
-            except:
+            except Exception:
                 self.retries += 1
         raise errors.RetriableException(self, args, kwargs)
+
+
+class Timeout(object):
+    """Hybrid decorator that implements the Timeout pattern. This is a
+    extremely basic decorator that starts the target function in a threading.
+    Thread object. It then joins against the thread and waits for the timeout.
+
+    If the timeout occurred, an errors.TimeoutException is raised by the
+    Timeout decorator.
+
+    If you want to get values back out of the thread, a common pattern in
+    Python is to pass in a mutable object such as a dictionary in the target
+    functions argument or keywords arguments list and write to that.
+
+    There are no return values from this decorator.
+    """
+
+    def __init__(
+        self,
+        timeout: float = 30,
+        timeout_callback: coll_abc.Callable[
+            [typing.List[typing.Any], typing.Dict[str, typing.Any]], None
+        ] = None,
+    ):
+        """Instantiates and returns an instance of the Timeout decorator.
+
+        Args:
+            timeout (float, optional): The timeout in seconds. Defaults to 30.
+            timeout_callback (_type_, optional): An optional function to call
+                when a timeout occurs. This function must declare both *args
+                and **kwargs parameters as it will be passed the same
+                parameters passed to the decorated function. Defaults to None.
+        """
+        self.mode = "decorating"
+        self.timeout = timeout
+        self.timeout_callback = timeout_callback
+
+    def __call__(self, *args, **kwargs):
+        if self.mode == "decorating":
+            self.func = args[0]
+            self.mode = "calling"
+            return self
+        runner = threading.Thread(target=self.func, args=args, kwargs=kwargs)
+        runner.start()
+        runner.join(timeout=self.timeout)
+        if runner.is_alive():
+            if self.timeout_callback is not None:
+                self.timeout_callback(*args, **kwargs)
+            else:
+                raise errors.TimeoutException()

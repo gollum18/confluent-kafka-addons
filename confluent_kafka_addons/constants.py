@@ -1,6 +1,7 @@
 import enum
 import typing
 
+
 class RetriableUnit(enum.Enum):
     SECONDS = 0
     MILLISECONDS = 1
@@ -10,15 +11,15 @@ class RetriableUnit(enum.Enum):
         """Determines if `unit` is constants.RetriableUnit.SECONDS.
 
         Args:
-            unit (typing.Union[int, RetriableUnit]): An int or 
+            unit (typing.Union[int, RetriableUnit]): An int or
                 constants.RetriableUnit.SECONDS instance.
 
         Raises:
-            TypeError: If `unit` is not an int or 
+            TypeError: If `unit` is not an int or
                 constants.RetriableUnit.SECONDS instance.
 
         Returns:
-            (bool): True if `unit` is constants.RetriableUnit.SECONDS, 
+            (bool): True if `unit` is constants.RetriableUnit.SECONDS,
                 False otherwise.
         """
         if isinstance(unit, int):
@@ -29,23 +30,23 @@ class RetriableUnit(enum.Enum):
             raise TypeError(
                 "[constants.RetriableUnit.is_seconds] - parameter "
                 + "'unit' must be one of the following types: [int, "
-                + "RetriableUnit]!")
-
+                + "RetriableUnit]!"
+            )
 
     @staticmethod
     def is_milliseconds(unit: typing.Union[int, "RetriableUnit"]) -> bool:
         """Determines if `unit` is constants.RetriableUnit.MILLISECONDS.
 
         Args:
-            unit (typing.Union[int, RetriableUnit]): An int or 
+            unit (typing.Union[int, RetriableUnit]): An int or
                 constants.RetriableUnit.MILLISECONDS instance.
 
         Raises:
-            TypeError: If `unit` is not an int or 
+            TypeError: If `unit` is not an int or
                 constants.RetriableUnit.MILLISECONDS instance.
 
         Returns:
-            (bool): True if `unit` is constants.RetriableUnit.MILLISECONDS, 
+            (bool): True if `unit` is constants.RetriableUnit.MILLISECONDS,
                 False otherwise.
         """
         if isinstance(unit, int):
@@ -56,8 +57,8 @@ class RetriableUnit(enum.Enum):
             raise TypeError(
                 "[constants.RetriableUnit.is_milliseconds] - parameter "
                 + "'unit' must be one of the following types: [int, "
-                + "RetriableUnit]!")
-
+                + "RetriableUnit]!"
+            )
 
     @staticmethod
     def is_valid(unit: typing.Union[int, "RetriableUnit"]):
@@ -69,8 +70,8 @@ class RetriableUnit(enum.Enum):
             raise TypeError(
                 "[constants.RetriableUnit.valid] - parameter "
                 + "'unit' must be one of the following types: [int, "
-                + "RetriableUnit]!")    
-
+                + "RetriableUnit]!"
+            )
 
     @staticmethod
     def format_str() -> str:
